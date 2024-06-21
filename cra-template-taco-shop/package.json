@@ -18,6 +18,8 @@
     "files": [
     "template",
     "template.json",
-    "template/gitignore"
+    "template/gitignore",
+    "template/public",
+    "template/src"
     ]
   }
