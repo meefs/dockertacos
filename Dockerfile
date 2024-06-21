@@ -1,23 +1,40 @@
-# Use an official Node runtime as the parent image
-FROM node:14
+# Build stage
+# Use Node.js 14 as the base image for the build stage
+FROM node:14 as build
 
-# Set the working directory in the container
+# Set the working directory inside the container to /app
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if available)
-COPY package*.json ./
+# Create a new React app using the local template
+RUN npx create-react-app my-app --template file:./
 
-# Install dependencies
+# Change to the newly created app directory
+WORKDIR /app/my-app
+
+# Install all dependencies
 RUN npm install
 
-# Copy the current directory contents into the container at /app
-COPY . .
+# Build the React app
+RUN npm run build
 
-# Make port 3000 available to the world outside this container
+# Production stage
+# Use a lightweight Node.js 14 alpine image for the production stage
+FROM node:14-alpine
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the build folder from the 'build' stage to the current stage
+COPY --from=build /app/my-app/build ./build
+
+# Copy package.json to the current stage
+COPY --from=build /app/my-app/package.json ./
+
+# Install only production dependencies
+RUN npm install --only=production
+
+# Inform Docker that the container will listen on port 3000 at runtime
 EXPOSE 3000
 
-# Define environment variable
-ENV NODE_ENV=production
-
-# Run the app when the container launches
-CMD ["npm", "start"]
+# Set the default command to serve the built React app
+CMD ["npx", "serve", "-s", "build"]
