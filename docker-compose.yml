@@ -44,7 +44,7 @@ services:
 
   web:
     build:
-      context: .
+      context: ./my-taco-app
       dockerfile: Dockerfile
     container_name: ${COMPOSE_PROJECT_NAME:-taco}_web
     ports:
