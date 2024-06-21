@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import tacoGif from './taco.gif';
+import tacoGif from './happytaco.gif';
 import tacoSound from './taco-sound.mp3';
 
 function App() {
