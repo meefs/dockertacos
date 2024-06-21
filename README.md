@@ -12,48 +12,55 @@ This project is a web application built with React, Docker, Elasticsearch, Kiban
 
 1. Clone the repository:
 ```bash
-$ git clone https://github.com/meefs/dockertacos.git
-$ cd dockertacos
+git clone https://github.com/meefs/dockertacos.git
+cd dockertacos
 ```
 
-2. Create a new React application:
+2. Create a new React application using the custom taco shop template:
 ```bash
-$ npx create-react-app web-app
-$ cd web-app
+npx create-react-app my-taco-app --template file:./cra-template-taco-shop
 ```
-3. Run the setup script to apply the taco theme and interactivity modifications:
+3. Navigate to the newly created app directory and start the development server:
 ```bash
-$ ./scripts/setup.sh
+cd my-taco-app
+npm start
 ```
 
-4. Start the react app
-```bash
-$ npm start
-```
-5. Verify react app is running by visiting http://localhost:3000
+4. Verify react app is running by visiting http://localhost:3000
+
+   
 
 ## Docker Setup
 1. Navigate back to teh project root directory:
 ```bash
-$ cd ..
+cd ..
 ```
 2. Build and run the Docker containers:
 ```bash
-$ docker-compose up -d --build
+docker-compose up -d --build
 ```
 3. Access the applications:
-- React app: `http://localhost:3000`
-- Kibana: `http://localhost:5601`
-- Nginx: `http://localhost:8080`
+- React app: http://localhost:3000
+- Kibana: http://localhost:5601
+- Nginx: http://localhost:8080
 
 ## Project Structure
 
-- `web-app/`: Contains the React application code
-- `scripts/`: Contains the setup script and taco theme modification script
+- `cra-template-taco-shop/`: Custom Create React App template for the taco-themed app
+  - `template/`: Contains the template files
+    - `src/`: React application source code
+      - `App.js`: Main application component with taco theme
+      - `App.css`: Styles for the taco-themed app
+      - `happytaco.gif`: Taco image for the app
+      - `taco-sound.mp3`: Sound effect for taco interaction
+    - `public/`: Public assets for the React app
+  - `package.json`: Template package configuration
+  - `template.json`: Template-specific dependencies and scripts
 - `Dockerfile`: Dockerfile for building the React app container
 - `docker-compose.yml`: Docker Compose configuration file
 - `nginx.conf`: Nginx configuration file
 - `filebeat.yml`: Filebeat configuration file
+- `.gitignore`: Specifies files and directories to be ignored by Git
 - `README.md`: Project documentation and setup instructions
 
 ## Contributing
