@@ -1,12 +1,14 @@
 # Build stage
-# Use Node.js 14 as the base image for the build stage
 FROM node:14 as build
 
 # Set the working directory inside the container to /app
 WORKDIR /app
 
+# Copy the template files
+COPY . .
+
 # Create a new React app using the local template
-RUN npx create-react-app my-taco-app --template file:./cra-template-taco-shop
+RUN npx create-react-app my-taco-app --template file:.
 
 # Change to the newly created app directory
 WORKDIR /app/my-taco-app
@@ -18,7 +20,6 @@ RUN npm install
 RUN npm run build
 
 # Production stage
-# Use a lightweight Node.js 14 alpine image for the production stage
 FROM node:14-alpine
 
 # Set the working directory to /app
