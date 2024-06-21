@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'  # Using a more current version for better feature support
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
@@ -10,6 +10,8 @@ services:
       - "9300:9300"
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - app-network
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.15.0
@@ -20,6 +22,8 @@ services:
       - "5601:5601"
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - app-network
 
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.15.0
@@ -30,6 +34,8 @@ services:
       - nginx-logs:/var/log/nginx
     depends_on:
       - elasticsearch
+    networks:
+      - app-network
 
   nginx:
     image: nginx:latest
@@ -41,6 +47,8 @@ services:
       - web
     ports:
       - "8080:80"
+    networks:
+      - app-network
 
   web:
     build:
@@ -49,9 +57,14 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME:-taco}_web
     ports:
       - "3000:3000"
-    # volumes: - .:/app # Commented out to prevent potential overwriting during development
+    networks:
+      - app-network
     environment:
       - NODE_ENV=development
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   elasticsearch-data:
