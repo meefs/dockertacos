@@ -4,11 +4,12 @@ FROM node:14 as build
 # Set the working directory inside the container to /app
 WORKDIR /app
 
-# Copy the template files
+# Copy the entire project (including the local template directory)
 COPY . .
 
-# Create a new React app using the local template
-RUN npx create-react-app my-taco-app --template file:.
+# Create a new React app using the local template. Ensure the template directory is correctly referenced
+# Assuming 'cra-template-taco-shop' is the folder name of the template
+RUN npx create-react-app my-taco-app --template file:cra-template-taco-shop
 
 # Change to the newly created app directory
 WORKDIR /app/my-taco-app
