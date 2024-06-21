@@ -17,7 +17,6 @@
     },
     "files": [
     "template",
-    "template.json",
-    "template.gitignore"
+    "template.json"
     ]
   }
