@@ -49,8 +49,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME:-taco}_web
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
+    # volumes: - .:/app # Commented out to prevent potential overwriting during development
     environment:
       - NODE_ENV=development
 
