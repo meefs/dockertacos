@@ -6,10 +6,10 @@ FROM node:14 as build
 WORKDIR /app
 
 # Create a new React app using the local template
-RUN npx create-react-app my-app --template file:./
+RUN npx create-react-app my-taco-app --template file:./cra-template-taco-shop
 
 # Change to the newly created app directory
-WORKDIR /app/my-app
+WORKDIR /app/my-taco-app
 
 # Install all dependencies
 RUN npm install
@@ -25,10 +25,10 @@ FROM node:14-alpine
 WORKDIR /app
 
 # Copy the build folder from the 'build' stage to the current stage
-COPY --from=build /app/my-app/build ./build
+COPY --from=build /app/my-taco-app/build ./build
 
 # Copy package.json to the current stage
-COPY --from=build /app/my-app/package.json ./
+COPY --from=build /app/my-taco-app/package.json ./
 
 # Install only production dependencies
 RUN npm install --only=production
