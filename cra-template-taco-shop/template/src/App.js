@@ -9,7 +9,13 @@ function App() {
 
   const handleClick = () => {
     setIsClicked(!isClicked);
-    audioRef.current.play();
+    playAudio();
+  };
+
+  const playAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+    }
   };
 
   return (
@@ -22,7 +28,8 @@ function App() {
           onClick={handleClick}
         />
         <p>Welcome to the Taco Shop!</p>
-        <audio ref={audioRef} src={tacoSound} />
+        <audio ref={audioRef} src={tacoSound} preload="auto" />
+        <button onClick={playAudio} className="taco-button">🌮</button>
       </header>
     </div>
   );
