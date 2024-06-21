@@ -16,7 +16,8 @@
       "url": "https://github.com/meefs/dockertacos/issues"
     },
     "files": [
-      "template",
-      "template.json"
+    "template",
+    "template.json",
+    "template.gitignore"
     ]
   }
