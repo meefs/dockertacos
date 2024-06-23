@@ -1,4 +1,4 @@
-# Build stage for the React application
+# Build stage
 FROM node:14 as build
 
 # Set the working directory inside the container to /app
@@ -7,7 +7,8 @@ WORKDIR /app
 # Copy the entire project (including the local template directory)
 COPY . .
 
-# Create a new React app using the local template
+# Create a new React app using the local template. Ensure the template directory is correctly referenced
+# Assuming 'cra-template-taco-shop' is the folder name of the template
 RUN npx create-react-app my-taco-app --template file:cra-template-taco-shop
 
 # Change to the newly created app directory
@@ -19,23 +20,23 @@ RUN npm install
 # Build the React app
 RUN npm run build
 
-# Production stage using NGINX to serve the app
-FROM nginx:alpine
+# Production stage
+FROM node:14-alpine
 
-# Set the working directory to /usr/share/nginx/html
-WORKDIR /usr/share/nginx/html
+# Set the working directory to /app
+WORKDIR /app
 
-# Remove default nginx static assets
-RUN rm -rf ./*
+# Copy the build folder from the 'build' stage to the current stage
+COPY --from=build /app/my-taco-app/build ./build
 
-# Copy the build folder from the 'build' stage to the NGINX serve directory
-COPY --from=build /app/my-taco-app/build .
+# Copy package.json to the current stage
+COPY --from=build /app/my-taco-app/package.json ./
 
-# Copy a custom NGINX configuration if necessary
-COPY nginx.conf /etc/nginx/nginx.conf
+# Install only production dependencies
+RUN npm install --only=production
 
-# Expose port 80 for HTTP traffic
-EXPOSE 80
+# Inform Docker that the container will listen on port 3000 at runtime
+EXPOSE 3000
 
-# Using the default command of NGINX image which starts NGINX
-CMD ["nginx", "-g", "daemon off;"]
+# Set the default command to serve the built React app
+CMD ["npx", "serve", "-s", "build"]
