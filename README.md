@@ -18,27 +18,9 @@ cd dockertacos
 
 2. Create a new React application using the custom taco shop template:
 ```bash
-npx create-react-app my-taco-app --template file:./cra-template-taco-shop
-```
-3. Navigate to the newly created app directory and start the development server:
-```bash
-cd my-taco-app
-npm start
+docker-compose up --build
 ```
 
-4. Verify react app is running by visiting http://localhost:3000
-
-   
-
-## Docker Setup
-1. Navigate back to teh project root directory:
-```bash
-cd ..
-```
-2. Build and run the Docker containers:
-```bash
-docker-compose up -d --build
-```
 3. Access the applications:
 - React app: http://localhost:3000
 - Kibana: http://localhost:5601
