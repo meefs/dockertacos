@@ -50,3 +50,4 @@ jobs:
           ${{github.event_name == 'release' && '--environment=production' || ''}}
         env:
           deploy_token: ${{secrets.EDGIO_DEPLOY_TOKEN}}
+          NODE_OPTIONS: --openssl-legacy-provider
