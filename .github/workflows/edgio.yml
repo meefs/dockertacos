@@ -39,12 +39,12 @@ jobs:
             ${{ runner.os }}-
       - name: Install packages
         run: npm ci # if using npm for your project
-        working-directory: cra-template-taco-shop
+        working-directory: my-taco-app
         #  run: rm -rf node_modules && yarn install --frozen-lockfile # if using yarn for your project
       - name: Deploy to Edgio
-        working-directory: cra-template-taco-shop
+        working-directory: my-taco-app
         run: |
-          npm run edgio deploy -- ${{'--branch=$BRANCH_NAME' || ''}} --token=$deploy_token --ignore-error CONFIG_SOURCE_SWITCH \
+          npm run edgio:deploy -- ${{'--branch=$BRANCH_NAME' || ''}} --token=$deploy_token --ignore-error CONFIG_SOURCE_SWITCH \
           ${{github.event_name == 'push' && '--environment=dev' || ''}} \
           ${{github.event_name == 'pull_request' && '--environment=dev' || ''}} \
           ${{github.event_name == 'release' && '--environment=production' || ''}}
