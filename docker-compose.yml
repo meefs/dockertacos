@@ -1,4 +1,5 @@
-version: '3.8'  # Using a more current version for better feature support
+version: '3.8' # Using a more current version for better feature support
+
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
@@ -25,17 +26,23 @@ services:
     networks:
       - app-network
 
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:7.15.0
-    container_name: ${COMPOSE_PROJECT_NAME:-taco}_filebeat
-    user: root
-    volumes:
-      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - nginx-logs:/var/log/nginx
-    depends_on:
-      - elasticsearch
-    networks:
-      - app-network
+filebeat:
+  image: docker.elastic.co/beats/filebeat:7.15.0
+  container_name: ${COMPOSE_PROJECT_NAME:-taco}_filebeat
+  user: root
+  volumes:
+    - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+    - ${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock:ro
+    - ${DOCKER_LOGS_PATH:-/var/lib/docker/containers}:/var/lib/docker/containers:ro
+  environment:
+    - DOCKER_LOGS_PATH=/var/lib/docker/containers
+    - DOCKER_HOST=unix:///var/run/docker.sock
+    - ELASTICSEARCH_HOSTS=elasticsearch:9200
+    - KIBANA_HOST=kibana:5601
+  depends_on:
+    - elasticsearch
+  networks:
+    - app-network
 
   nginx:
     image: nginx:latest
@@ -69,3 +76,4 @@ networks:
 volumes:
   elasticsearch-data:
   nginx-logs:
+  filebeat_data:

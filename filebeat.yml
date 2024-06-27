@@ -1,7 +1,37 @@
 filebeat.inputs:
 - type: log
+  enabled: true
   paths:
-    - /var/log/nginx/*.log
+    - ${DOCKER_LOGS_PATH:-/var/lib/docker/containers}/*/*-json.log
+
+processors:
+- add_docker_metadata:
+    host: "${DOCKER_HOST:-unix:///var/run/docker.sock}"
+- decode_json_fields:
+    fields: ["message"]
+    target: "json"
+    overwrite_keys: true
+    add_error_key: true
+    json.keys_under_root: true
 
 output.elasticsearch:
-  hosts: ["elasticsearch:9200"]
+  hosts: ["${ELASTICSEARCH_HOSTS:-elasticsearch:9200}"]
+
+setup.kibana:
+  host: "${KIBANA_HOST:-kibana:5601}"
+
+logging.json: true
+logging.metrics.enabled: false
+
+# Optional: Configure Filebeat to check for new/updated configurations every 30 seconds
+filebeat.config:
+  prospectors:
+    path: ${PATH_CONFIG:/usr/share/filebeat/prospectors.d/*.yml}
+    reload.enabled: true
+    reload.period: 30s
+
+# Optional: Configure Filebeat modules (if needed)
+filebeat.config.modules:
+  path: ${PATH_CONFIG:/usr/share/filebeat/modules.d/*.yml}
+  reload.enabled: true
+  reload.period: 30s
