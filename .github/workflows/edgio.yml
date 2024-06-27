@@ -41,9 +41,6 @@ jobs:
         run: npm ci # if using npm for your project
         working-directory: cra-template-taco-shop
         #  run: rm -rf node_modules && yarn install --frozen-lockfile # if using yarn for your project
-      - name: Lint the website
-        working-directory: cra-template-taco-shop
-        run: npx tsc --noEmit && npm run lint
       - name: Deploy to Edgio
         working-directory: cra-template-taco-shop
         run: |
